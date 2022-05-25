@@ -1,33 +1,32 @@
-import React,{ useState,useEffect } from 'react';
+import React,{ useEffect, useState} from 'react';
+import Sort from './GetSortedData';
 export default function DataTable(props){
-    let [data,setData]=useState([]);
-    const getData=()=>{
-        fetch('data.json',{
-            headers : { 
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
+    const [data,setData]=useState([]);
+        const getData=()=>{
+            fetch("data.json",{
+                headers : { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+                }
             }
+            )
+            .then(function(response){
+                console.log(response)
+                return response.json();
+            })
+            .then(function(myJson) {
+                console.log(myJson);
+                setData(myJson)
+            });
         }
-        )
-        .then(function(response){
-            console.log(response)
-            return response.json();
-        })
-        .then(function(myJson) {
-            console.log(myJson);
-            setData(myJson)
-        });
-    }
-    useEffect(()=>{
-    getData()
-    },[]);
-
+        useEffect(()=>
+        getData()
+        ,[]);
     const columns = React.useMemo(()=>["Name","Position","Office","Age","Start Date","Salary"],[]);
     const tableStyle={border:"1px solid lightgrey"};
     const [search,setSearch]=useState("");
     const [pageSize,setPageSize]= useState(15);
     const [currentPage,setCurrentPage]=useState(0);
-    let first =(pageSize)*(currentPage);
 
     let filtered=data.filter((e)=>{
         if(search===""){
@@ -41,12 +40,15 @@ export default function DataTable(props){
     });
 
     let maxPage=((filtered.length/pageSize)+0.3).toFixed(0);
+    let first =(pageSize)*(currentPage);
     let last=pageSize*(currentPage+1)<=filtered.length? pageSize*(currentPage+1):filtered.length;
+    //[first,last]= index of currently displayed data
     let page=filtered.slice(first,last);
     let pages=[];
     let canPreviousPage = currentPage > 0;
     let canNextPage= currentPage+1 < maxPage;
-    
+    const [order,setOrder]=useState('a');
+    let resetPage=()=>setCurrentPage(0);
     for(let i = 1; i<=maxPage;i++){
         pages.push(i);
     }
@@ -61,7 +63,7 @@ export default function DataTable(props){
                     value={pageSize}
                     onChange={e => {
                     setPageSize(Number(e.target.value));
-                    setCurrentPage(0);
+                    resetPage();
                     }}>
                     {[5,10,15 ,20, 25].map(pageSize => (
                     <option key={pageSize} value={pageSize} selected>
@@ -74,7 +76,10 @@ export default function DataTable(props){
 
                 <br></br>
 
-                <input type="text" placeholder="Search ..." onChange={(e)=>setSearch(e.target.value.toString())} 
+                <input type="text" placeholder="Search ..." onChange={(e)=>{
+                    setSearch(e.target.value.toString());
+                    resetPage();
+                }} 
                     style={{
                         position:"relative",
                         right:0,
@@ -85,11 +90,22 @@ export default function DataTable(props){
             <table style={tableStyle} cellPadding={11}>
                 <thead style={{borderBottom:"2px solid black"}}>
                     {
-                        columns.map((header)=>
-                        <th>
-                            {header}
-                        </th>
-                        )
+                        columns.map((header)=>(
+                            <>
+                                <th>
+                                    {header}
+                                    <button value={order} onClick={()=>{
+                                    setOrder(order==='a'?'d':'a');
+                                    const sorted = Sort(data,order,header);
+                                    console.log(sorted);
+                                    setData(sorted);
+                                }}>
+
+                                    {order}
+                                </button>
+                                </th>
+                            </>
+                        ))
                     }
                 </thead>
 
@@ -114,7 +130,7 @@ export default function DataTable(props){
             <div className="pagination">
                 <span>Showing{' '}
                     <strong>
-                        {(pageSize)*(currentPage)+1} to {pageSize*(currentPage+1)<=filtered.length?pageSize*(currentPage+1):filtered.length} of {filtered.length} entries
+                        {((pageSize)*(currentPage)+1)>filtered.length?filtered.length:(pageSize)*(currentPage)+1} to {pageSize*(currentPage+1)<=filtered.length?pageSize*(currentPage+1):filtered.length} of {filtered.length} entries
                     </strong>
                 </span>
                 <span style={{
