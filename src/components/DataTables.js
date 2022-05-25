@@ -1,5 +1,4 @@
 import React,{ useEffect, useState} from 'react';
-import Sort from './GetSortedData';
 export default function DataTable(props){
     const [data,setData]=useState([]);
         const getData=()=>{
@@ -94,15 +93,6 @@ export default function DataTable(props){
                             <>
                                 <th>
                                     {header}
-                                    <button value={order} onClick={()=>{
-                                    setOrder(order==='a'?'d':'a');
-                                    const sorted = Sort(data,order,header);
-                                    console.log(sorted);
-                                    setData(sorted);
-                                }}>
-
-                                    {order}
-                                </button>
                                 </th>
                             </>
                         ))
