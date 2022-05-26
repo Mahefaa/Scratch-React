@@ -1,8 +1,7 @@
 import React,{ useEffect, useState} from 'react';
-import Sort from './GetSortedData';
-export default function DataTable(props){
+export default function DataTable(){
     const [data,setData]=useState([]);
-        const getData=()=>{
+    const getData=()=>{
             fetch("data.json",{
                 headers : { 
                 'Content-Type': 'application/json',
@@ -22,6 +21,7 @@ export default function DataTable(props){
         useEffect(()=>
         getData()
         ,[]);
+
     const columns = React.useMemo(()=>["Name","Position","Office","Age","Start Date","Salary"],[]);
     const tableStyle={border:"1px solid lightgrey"};
     const [search,setSearch]=useState("");
@@ -47,7 +47,6 @@ export default function DataTable(props){
     let pages=[];
     let canPreviousPage = currentPage > 0;
     let canNextPage= currentPage+1 < maxPage;
-    const [order,setOrder]=useState('a');
     let resetPage=()=>setCurrentPage(0);
     for(let i = 1; i<=maxPage;i++){
         pages.push(i);
@@ -90,22 +89,13 @@ export default function DataTable(props){
             <table style={tableStyle} cellPadding={11}>
                 <thead style={{borderBottom:"2px solid black"}}>
                     {
-                        columns.map((header)=>(
-                            <>
+                        columns.map((header)=>{
+                            return(
                                 <th>
                                     {header}
-                                    <button value={order} onClick={()=>{
-                                    setOrder(order==='a'?'d':'a');
-                                    const sorted = Sort(data,order,header);
-                                    console.log(sorted);
-                                    setData(sorted);
-                                }}>
-
-                                    {order}
-                                </button>
                                 </th>
-                            </>
-                        ))
+                            );
+                        })
                     }
                 </thead>
 
@@ -127,7 +117,7 @@ export default function DataTable(props){
             </table>
             <br></br>
             <hr></hr>
-            <div className="pagination">
+            <div classNameName="pagination">
                 <span>Showing{' '}
                     <strong>
                         {((pageSize)*(currentPage)+1)>filtered.length?filtered.length:(pageSize)*(currentPage)+1} to {pageSize*(currentPage+1)<=filtered.length?pageSize*(currentPage+1):filtered.length} of {filtered.length} entries
