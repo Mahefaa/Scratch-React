@@ -1,5 +1,5 @@
 import React,{ useEffect, useState} from 'react';
-export default function DataTable(){
+export default function DataTable(props){
     const [data,setData]=useState([]);
     const getData=()=>{
             fetch("data.json",{
@@ -165,4 +165,3 @@ export default function DataTable(){
     )
     
 }
-
