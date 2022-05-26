@@ -120,7 +120,7 @@ export default function DataTable(props){
             <div classNameName="pagination">
                 <span>Showing{' '}
                     <strong>
-                        {((pageSize)*(currentPage)+1)>filtered.length?filtered.length:(pageSize)*(currentPage)+1} to {pageSize*(currentPage+1)<=filtered.length?pageSize*(currentPage+1):filtered.length} of {filtered.length} entries
+                        {(first+1)>filtered.length?filtered.length:first+1} to {last} of {filtered.length} entries
                     </strong>
                 </span>
                 <span style={{
