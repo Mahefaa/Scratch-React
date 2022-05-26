@@ -12,7 +12,7 @@ function App(){
                 <a class="navbar-brand ps-3" href="index.html">Start Bootstrap</a>
                 (//Sidebar Toggle)
                 <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"
-                onClick={()=>setToggle(toggle?false:true)}>
+                onClick={()=>setToggle(!toggle)}>
                     <i class="fas fa-bars"></i>
                 </button>
                 (//Navbar Search)
@@ -47,9 +47,7 @@ function App(){
                             </ol>
                             <div className="card mb-4">
                                 <div className="card-body">
-                                    This Datatable has been generated with ReactTable. For more informations please refer to {' '}
-                                    <a target="_blank" href="https://react-table.tanstack.com" rel="noreferrer">{' '}official React-Tables documentation</a>
-                                    .
+                                    This table has been inspired by dataTables but developped from scratch using React Hooks.
                                 </div>
                             </div>
                             <div className="card mb-4">

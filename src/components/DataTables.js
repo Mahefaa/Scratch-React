@@ -1,5 +1,6 @@
 import React,{ useEffect, useState} from 'react';
 export default function DataTable(props){
+    //this is how to get json Data stored in %PUBLIC%
     const [data,setData]=useState([]);
     const getData=()=>{
             fetch("data.json",{
@@ -48,11 +49,10 @@ export default function DataTable(props){
     let canPreviousPage = currentPage > 0;
     let canNextPage= currentPage+1 < maxPage;
     let resetPage=()=>setCurrentPage(0);
+
     for(let i = 1; i<=maxPage;i++){
         pages.push(i);
     }
-
-    
 
     return (
         <>
@@ -71,18 +71,14 @@ export default function DataTable(props){
                     ))}
                 </select>
 
-                <label for="choice"> entries per page</label>
+                <label for="choice">{' '}entries per page</label>
 
                 <br></br>
 
                 <input type="text" placeholder="Search ..." onChange={(e)=>{
                     setSearch(e.target.value.toString());
                     resetPage();
-                }} 
-                    style={{
-                        position:"relative",
-                        right:0,
-                        }}>
+                }}>
 
                 </input>
             </div>
